@@ -9,10 +9,21 @@ FLAGS = None;
 def read_data():
     return arff.load(open(FLAGS.data_dir + '/MW1.arff'))
 
+def split_data(data):
+    defect_col = len(data['attributes']) - 1
+
+    defects = [x for x in data['data'] if x[defect_col] == 'Y']
+    correct = [x for x in data['data'] if x[defect_col] == 'N']
+
+    if not len(defects) + len(correct) == len(data['data']):
+        raise AssertionError('Data did not split properely!')
+
+    return correct, defects
+
 def main():
-    print("hello\n");
     data = read_data()
 
+    correct, defects = split_data(data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
