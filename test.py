@@ -11,27 +11,23 @@ FLAGS = None;
 def read_data():
     return arff.load(open(FLAGS.data_dir + '/MW1.arff'))
 
-# Splits the data and normalizes it
-def split_data(data):
+# Preprocess the data
+def preprocess_data(data):
     defect_col = len(data['attributes']) - 1
 
-    correct = np.array([x[0:defect_col] for x in data['data'] if x[defect_col] == 'N'], dtype='f')
-    defects = np.array([x[0:defect_col] for x in data['data'] if x[defect_col] == 'Y'], dtype='f')
-
-    if not len(defects) + len(correct) == len(data['data']):
-        raise AssertionError('Data did not split properely!')
+    features = np.array([x[0:defect_col] for x in data['data']], dtype='f')
+    labels = np.reshape(np.array([x[defect_col] for x in data['data']]), (len(data['data']), 1))
 
     data_argmax = np.amax(np.array([x[0:defect_col] for x in data['data']]), axis=0)
 
-    correct = correct / data_argmax
-    defects = defects / data_argmax
+    features = features / data_argmax
 
-    return correct, defects
+    return features, labels
 
 # Run the stuff
 def main():
     data = read_data()
-    correct, defects = split_data(data)
+    features, labels = preprocess_data(data)
 
 # Set up run arguments
 if __name__ == '__main__':
