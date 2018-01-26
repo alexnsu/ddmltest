@@ -6,9 +6,12 @@ import arff
 
 FLAGS = None;
 
+# Read the data
+# TODO expand to read more data from more datasets
 def read_data():
     return arff.load(open(FLAGS.data_dir + '/MW1.arff'))
 
+# Splits the data and normalizes it
 def split_data(data):
     defect_col = len(data['attributes']) - 1
 
@@ -25,10 +28,12 @@ def split_data(data):
 
     return correct, defects
 
+# Run the stuff
 def main():
     data = read_data()
     correct, defects = split_data(data)
 
+# Set up run arguments
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
