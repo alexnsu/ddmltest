@@ -20,12 +20,12 @@ def read_data():
 
 # Preprocess the data
 def preprocess_data(data):
-    defect_col = len(data['attributes']) - 1
+    label_col = len(data['attributes']) - 1
 
-    features = np.array([x[0:defect_col] for x in data['data']], dtype='f')
-    labels = np.reshape(np.array([YN_to_num(x[defect_col]) for x in data['data']]), (len(data['data']), 1))
+    features = np.array([x[0:label_col] for x in data['data']], dtype='f')
+    labels = np.reshape(np.array([YN_to_num(x[label_col]) for x in data['data']]), (len(data['data']), 1))
 
-    data_argmax = np.amax(np.array([x[0:defect_col] for x in data['data']]), axis=0)
+    data_argmax = np.amax(np.array([x[0:label_col] for x in data['data']]), axis=0)
 
     features = features / data_argmax
 
