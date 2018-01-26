@@ -4,6 +4,8 @@ import argparse
 import sys
 import arff
 
+from sklearn import svm
+
 FLAGS = None;
 
 # Helper function, turns the 'Y' / 'N' labels into numbers
@@ -23,7 +25,7 @@ def preprocess_data(data):
     label_col = len(data['attributes']) - 1
 
     features = np.array([x[0:label_col] for x in data['data']], dtype='f')
-    labels = np.reshape(np.array([YN_to_num(x[label_col]) for x in data['data']]), (len(data['data']), 1))
+    labels = np.array([YN_to_num(x[label_col]) for x in data['data']])
 
     data_argmax = np.amax(np.array([x[0:label_col] for x in data['data']]), axis=0)
 
@@ -34,6 +36,8 @@ def preprocess_data(data):
 def main():
     data = read_data()
     features, labels = preprocess_data(data)
+    clf = svm.SVC()
+    clf.fit(features, labels)
 
 # Set up run arguments
 if __name__ == '__main__':
