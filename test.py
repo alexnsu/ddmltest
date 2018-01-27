@@ -3,10 +3,12 @@ import numpy as np
 import argparse
 import sys
 import arff
+import pprint
 
 from sklearn import svm
 
 FLAGS = None;
+pp = pprint.PrettyPrinter(indent=2)
 
 # Helper function, turns the 'Y' / 'N' labels into numbers
 def YN_to_num(x):
@@ -18,7 +20,17 @@ def YN_to_num(x):
 # Read the data
 # TODO expand to read more data from more datasets
 def read_data():
-    return arff.load(open(FLAGS.data_dir + '/MW1.arff'))
+    PC1 = arff.load(open(FLAGS.data_dir + '/PC1.arff'))
+    PC2 = arff.load(open(FLAGS.data_dir + '/PC2.arff'))
+    PC3 = arff.load(open(FLAGS.data_dir + '/PC3.arff'))
+    PC4 = arff.load(open(FLAGS.data_dir + '/PC4.arff'))
+
+    # Need to remove LOC_BLANK attrib. from PC{1, 3, 4} since PC2 lacks that one
+    PC2['data'] += [x[1:] for x in PC1['data']]
+    PC2['data'] += [x[1:] for x in PC3['data']]
+    PC2['data'] += [x[1:] for x in PC4['data']]
+
+    return PC2
 
 # Preprocess the data
 def preprocess_data(data):
