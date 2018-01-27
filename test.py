@@ -6,6 +6,8 @@ import arff
 import pprint
 
 from sklearn import svm
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
 FLAGS = None;
 pp = pprint.PrettyPrinter(indent=2)
@@ -46,10 +48,18 @@ def preprocess_data(data):
     return features, labels
 
 def main():
+    train = {}
+    test = {}
+
     data = read_data()
     features, labels = preprocess_data(data)
+    X_train, X_test, Y_train, Y_test = train_test_split(features, labels, test_size = 0.33)
+
     clf = svm.SVC()
-    clf.fit(features, labels)
+    clf.fit(X_train, Y_train)
+
+    svm_pred = clf.predict(X_test)
+    pp.pprint(accuracy_score(Y_test, svm_pred))
 
 # Set up run arguments
 if __name__ == '__main__':
