@@ -7,6 +7,7 @@ import pprint
 
 from sklearn import svm
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
 
 FLAGS = None;
@@ -44,26 +45,32 @@ def preprocess_data(data):
 
     data_argmax = np.amax(np.array([x[0:label_col] for x in data['data']]), axis=0)
 
-    features = features / data_argmax
+    #features = features / data_argmax
 
     return features, labels
 
+def train_and_test(clf, dataset, clf_name=None):
+    clf.fit(dataset['X_train'], dataset['Y_train'])
+    pred = clf.predict(dataset['X_test'])
+
+    if clf_name:
+        print("Classifier: \t", clf_name)
+    print("Acc: \t\t", accuracy_score(dataset['Y_test'], pred), "\n")
+
 def main():
+    dataset = dict.fromkeys(['X_train', 'X_test', 'Y_train', 'Y_test'])
     train = {}
     test = {}
 
     data = read_data()
     features, labels = preprocess_data(data)
-    X_train, X_test, Y_train, Y_test = train_test_split(features, labels, test_size = 0.33)
 
-    clf = svm.SVC()
-    clf.fit(X_train, Y_train)
+    dataset['X_train'], dataset['X_test'], dataset['Y_train'], dataset['Y_test'] = train_test_split(features, labels, test_size = 0.33)
 
-    svm_pred = clf.predict(X_test)
-    # Note: does not actually predict anything to be defects lol
-    print("Acc: \t\t", accuracy_score(Y_test, svm_pred))
+    train_and_test(svm.SVC(), dataset, clf_name = "Support Vector Machine")
+    train_and_test(GaussianNB(), dataset, clf_name = "Naive Bayes")
 
-# Set up run arguments
+    # Set up run arguments
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
