@@ -35,6 +35,7 @@ def read_data():
     return PC2
 
 # Preprocess the data
+# Split into features and labels, normalize features to [0, 1]
 def preprocess_data(data):
     label_col = len(data['attributes']) - 1
 
@@ -59,7 +60,8 @@ def main():
     clf.fit(X_train, Y_train)
 
     svm_pred = clf.predict(X_test)
-    pp.pprint(accuracy_score(Y_test, svm_pred))
+    # Note: does not actually predict anything to be defects lol
+    print("Acc: \t\t", accuracy_score(Y_test, svm_pred))
 
 # Set up run arguments
 if __name__ == '__main__':
