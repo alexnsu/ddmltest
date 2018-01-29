@@ -49,12 +49,14 @@ def preprocess_data(data):
 
     return features, labels
 
+# Trains and tests the speciifed classifier on the dataset
 def train_and_test(clf, dataset, clf_name=None):
     clf.fit(dataset['X_train'], dataset['Y_train'])
     pred = clf.predict(dataset['X_test'])
 
     if clf_name:
         print("Classifier: \t", clf_name)
+
     print("Acc: \t\t", accuracy_score(dataset['Y_test'], pred), "\n")
 
 def main():
