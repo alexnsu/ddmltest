@@ -76,6 +76,7 @@ def main():
 
     data = read_data()
     features, labels = preprocess_data(data)
+    total_datapoints = labels.shape[0]
     total_defects = sum(labels)
 
     dataset['X_train'], dataset['X_test'], dataset['Y_train'], dataset['Y_test'] = train_test_split(features, labels, test_size = 0.33)
@@ -83,7 +84,7 @@ def main():
     train_defects = sum(dataset['Y_train'])
     test_defects = sum(dataset['Y_test'])
 
-    print("Defects in dataset:\t\t{}".format(total_defects))
+    print("Defects in dataset:\t\t{} ({}%)".format(total_defects, total_defects / total_datapoints * 100))
     print("Defects in training set:\t{} ({}%)".format(train_defects, train_defects / total_defects * 100))
     print("Defects in test set:\t\t{} ({}%)".format(test_defects, test_defects / total_defects * 100))
     print()
