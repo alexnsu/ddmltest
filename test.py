@@ -85,9 +85,10 @@ def main():
     train_defects = sum(dataset['Y_train'])
     test_defects = sum(dataset['Y_test'])
 
-    print("Defects in dataset:\t\t{} ({:0.2f} %)".format(total_defects, total_defects / total_datapoints * 100))
-    print("Defects in training set:\t{} ({:0.2f} %)".format(train_defects, train_defects / total_defects * 100))
-    print("Defects in test set:\t\t{} ({:0.2f} %)".format(test_defects, test_defects / total_defects * 100))
+    print("Defects in dataset:\t\t{} ({:0.2f} % of total data points)".format(total_defects, total_defects / total_datapoints * 100))
+    print("---")
+    print("Defects in training set:\t{} ({:0.2f} % of total defects)".format(train_defects, train_defects / total_defects * 100))
+    print("Defects in test set:\t\t{} ({:0.2f} % of total defects)".format(test_defects, test_defects / total_defects * 100))
     print()
     train_and_test(svm.SVC(), dataset, clf_name = "Support Vector Machine")
     train_and_test(GaussianNB(), dataset, clf_name = "Naive Bayes")
@@ -101,6 +102,6 @@ if __name__ == '__main__':
             type=str,
             default='',
             help="Directory of the data."
-    )
+            )
     FLAGS, unparsed = parser.parse_known_args()
     main()
