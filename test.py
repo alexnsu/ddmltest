@@ -9,6 +9,8 @@ from sklearn import svm
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 
 FLAGS = None;
 pp = pprint.PrettyPrinter(indent=2)
@@ -49,15 +51,23 @@ def preprocess_data(data):
 
     return features, labels
 
+def test_helper(fun, test_name, labels, pred):
+    print(test_name, fun(labels, pred))
+
+
 # Trains and tests the speciifed classifier on the dataset
 def train_and_test(clf, dataset, clf_name=None):
     clf.fit(dataset['X_train'], dataset['Y_train'])
     pred = clf.predict(dataset['X_test'])
 
     if clf_name:
-        print("Classifier: \t", clf_name)
+        print("Classifier:\t{}".format(clf_name))
+        print("---")
 
-    print("Acc: \t\t", accuracy_score(dataset['Y_test'], pred), "\n")
+    print("Accuracy:\t{}".format(accuracy_score(dataset['Y_test'], pred)))
+    print("Precision:\t{}".format(precision_score(dataset['Y_test'], pred)))
+    print("Recall:\t\t{}".format(recall_score(dataset['Y_test'], pred)))
+    print()
 
 def main():
     dataset = dict.fromkeys(['X_train', 'X_test', 'Y_train', 'Y_test'])
@@ -66,9 +76,17 @@ def main():
 
     data = read_data()
     features, labels = preprocess_data(data)
+    total_defects = sum(labels)
 
     dataset['X_train'], dataset['X_test'], dataset['Y_train'], dataset['Y_test'] = train_test_split(features, labels, test_size = 0.33)
 
+    train_defects = sum(dataset['Y_train'])
+    test_defects = sum(dataset['Y_test'])
+
+    print("Defects in dataset:\t\t{}".format(total_defects))
+    print("Defects in training set:\t{} ({}%)".format(train_defects, train_defects / total_defects * 100))
+    print("Defects in test set:\t\t{} ({}%)".format(test_defects, test_defects / total_defects * 100))
+    print()
     train_and_test(svm.SVC(), dataset, clf_name = "Support Vector Machine")
     train_and_test(GaussianNB(), dataset, clf_name = "Naive Bayes")
 
