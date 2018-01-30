@@ -47,7 +47,7 @@ def preprocess_data(data):
 
     data_argmax = np.amax(np.array([x[0:label_col] for x in data['data']]), axis=0)
 
-    #features = features / data_argmax
+    features = features / data_argmax
 
     return features, labels
 
@@ -64,9 +64,9 @@ def train_and_test(clf, dataset, clf_name=None):
         print("Classifier:\t{}".format(clf_name))
         print("---")
 
-    print("Accuracy:\t{}".format(accuracy_score(dataset['Y_test'], pred)))
-    print("Precision:\t{}".format(precision_score(dataset['Y_test'], pred)))
-    print("Recall:\t\t{}".format(recall_score(dataset['Y_test'], pred)))
+    print("Accuracy:\t{:0.2f}".format(accuracy_score(dataset['Y_test'], pred)))
+    print("Precision:\t{:0.2f}".format(precision_score(dataset['Y_test'], pred)))
+    print("Recall:\t\t{:0.2f}".format(recall_score(dataset['Y_test'], pred)))
     print()
 
 def main():
@@ -84,9 +84,9 @@ def main():
     train_defects = sum(dataset['Y_train'])
     test_defects = sum(dataset['Y_test'])
 
-    print("Defects in dataset:\t\t{} ({}%)".format(total_defects, total_defects / total_datapoints * 100))
-    print("Defects in training set:\t{} ({}%)".format(train_defects, train_defects / total_defects * 100))
-    print("Defects in test set:\t\t{} ({}%)".format(test_defects, test_defects / total_defects * 100))
+    print("Defects in dataset:\t\t{} ({:0.2f} %)".format(total_defects, total_defects / total_datapoints * 100))
+    print("Defects in training set:\t{} ({:0.2f} %)".format(train_defects, train_defects / total_defects * 100))
+    print("Defects in test set:\t\t{} ({:0.2f} %)".format(test_defects, test_defects / total_defects * 100))
     print()
     train_and_test(svm.SVC(), dataset, clf_name = "Support Vector Machine")
     train_and_test(GaussianNB(), dataset, clf_name = "Naive Bayes")
