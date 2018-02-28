@@ -65,9 +65,13 @@ def train_and_test(clf, dataset, clf_name=None):
         print("Classifier:\t{}".format(clf_name))
         print("---")
 
+    precision = precision_score(dataset['Y_test'], pred)
+    recall = recall_score(dataset['Y_test'], pred)
+    f_measure = 2 * (precision * recall) / (precision + recall)
     print("Accuracy:\t{:0.2f}".format(accuracy_score(dataset['Y_test'], pred)))
-    print("Precision:\t{:0.2f}".format(precision_score(dataset['Y_test'], pred)))
-    print("Recall:\t\t{:0.2f}".format(recall_score(dataset['Y_test'], pred)))
+    print("Precision:\t{:0.2f}".format(precision))
+    print("Recall:\t\t{:0.2f}".format(recall))
+    print("F-measure:\t{:0.2f}".format(f_measure))
     print()
 
 def main():
