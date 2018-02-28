@@ -1,2 +1,2 @@
-run: test.py
-	python test.py --data-dir data
+nasa: nasa.py
+	python nasa.py --data-dir data
